@@ -165,8 +165,38 @@ def glue_convert_examples_to_features(
 
     return features
 
+#Part a: BoolqProcessor class
+import json
+class BoolqProcessor(DataProcessor):
+    def get_example_from_tensor_dict(self, tensor_dict):
+        return InputExample(
+            tensor_dict["idx"].numpy(),
+            tensor_dict["question"].numpy().decode("utf-8"),
+            tensor_dict["passage"].numpy().decode("utf-8"),
+            str(tensor_dict["label"].numpy()),
+        )
 
-class MrpcProcessor(DataProcessor):
+    def get_train_examples(self, data_dir):
+        logger.info("LOOKING AT {}".format(os.path.join(data_dir, "train.jsonl")))
+        return self._create_examples(json.loads(os.path.join(data_dir, "train.jsonl")), "train")
+
+    def get_dev_examples(self, data_dir):
+        return self._create_examples(json.loads(os.path.join(data_dir, "dev.jsonl")), "dev")
+    
+    def get_labels(self):
+        return ["true" , "false"]
+
+    def _create_examples(self, lines, set_type):
+        examples = []
+        for (i, line) in enumerate(lines):
+            guid = "%s-%s" % (set_type, i)
+            text_a = lines["question"]
+            text_b = lines["passage"]
+            label = line["answer"]
+            examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
+        return examples
+
+class MrpcProcessor(DataProcessor): 
     """Processor for the MRPC data set (GLUE version)."""
 
     def get_example_from_tensor_dict(self, tensor_dict):
@@ -517,6 +547,7 @@ class WnliProcessor(DataProcessor):
 
 
 glue_tasks_num_labels = {
+    "boolq": 1,
     "cola": 2,
     "mnli": 3,
     "mrpc": 2,
@@ -529,6 +560,7 @@ glue_tasks_num_labels = {
 }
 
 glue_processors = {
+    "boolq": BoolqProcessor,
     "cola": ColaProcessor,
     "mnli": MnliProcessor,
     "mnli-mm": MnliMismatchedProcessor,
@@ -542,6 +574,7 @@ glue_processors = {
 }
 
 glue_output_modes = {
+    "boolq": "classification",
     "cola": "classification",
     "mnli": "classification",
     "mnli-mm": "classification",
