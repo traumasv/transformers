@@ -177,11 +177,15 @@ class BoolqProcessor(DataProcessor):
         )
 
     def get_train_examples(self, data_dir):
+        with open(os.path.join(data_dir, "train.jsonl")) as file:
+            data = json.load(file)
         logger.info("LOOKING AT {}".format(os.path.join(data_dir, "train.jsonl")))
-        return self._create_examples(json.loads(os.path.join(data_dir, "train.jsonl")), "train")
+        return self._create_examples(data, "train")
 
     def get_dev_examples(self, data_dir):
-        return self._create_examples(json.loads(os.path.join(data_dir, "dev.jsonl")), "dev")
+        with open(os.path.join(data_dir, "train.jsonl")) as file:
+            data = json.load(file)
+        return self._create_examples(data, "dev")
     
     def get_labels(self):
         return ["true" , "false"]
@@ -547,7 +551,7 @@ class WnliProcessor(DataProcessor):
 
 
 glue_tasks_num_labels = {
-    "boolq": 1,
+    "boolq": 2,
     "cola": 2,
     "mnli": 3,
     "mrpc": 2,
