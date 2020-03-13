@@ -186,7 +186,7 @@ class BoolqProcessor(DataProcessor):
 
     def get_dev_examples(self, data_dir):
         data = []
-        with open(os.path.join(data_dir, "train.jsonl")) as file:
+        with open(os.path.join(data_dir, "val.jsonl")) as file:
             for line in file:
                 data.append(json.loads(line))
         return self._create_examples(data, "dev")
