@@ -192,7 +192,7 @@ class BoolqProcessor(DataProcessor):
         return self._create_examples(data, "dev")
     
     def get_labels(self):
-        return ["true" , "false"]
+        return ["True" , "False"]
 
     def _create_examples(self, lines, set_type):
         examples = []
@@ -202,7 +202,7 @@ class BoolqProcessor(DataProcessor):
             text_a = line["question"]
             text_b = line["passage"]
             if(set_type == "train"):
-                label = line["label"]
+                label = "True" if line["label"] == "true" else "False" 
                 examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
             else:
                 examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b))
