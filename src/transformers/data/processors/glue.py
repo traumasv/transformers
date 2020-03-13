@@ -177,14 +177,18 @@ class BoolqProcessor(DataProcessor):
         )
 
     def get_train_examples(self, data_dir):
+        data = []
         with open(os.path.join(data_dir, "train.jsonl")) as file:
-            data = json.load(file)
+            for line in file:
+                data.append(json.load(file))
         logger.info("LOOKING AT {}".format(os.path.join(data_dir, "train.jsonl")))
         return self._create_examples(data, "train")
 
     def get_dev_examples(self, data_dir):
+        data = []
         with open(os.path.join(data_dir, "train.jsonl")) as file:
-            data = json.load(file)
+            for line in file:
+                data.append(json.load(file))
         return self._create_examples(data, "dev")
     
     def get_labels(self):
