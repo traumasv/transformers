@@ -201,7 +201,7 @@ class BoolqProcessor(DataProcessor):
             guid = "%s-%s" % (set_type, i)
             text_a = line["question"]
             text_b = line["passage"]
-            if(set_type == "train"):
+            if(set_type != "train"):
                 label = line["answer"]
                 examples.append(InputExample(guid=guid, text_a=text_a, text_b=text_b, label=label))
             else:
