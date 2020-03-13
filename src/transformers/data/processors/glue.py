@@ -188,7 +188,7 @@ class BoolqProcessor(DataProcessor):
         data = []
         with open(os.path.join(data_dir, "train.jsonl")) as file:
             for line in file:
-                data.append(json.load(file))
+                data.append(json.loads(line))
         return self._create_examples(data, "dev")
     
     def get_labels(self):
