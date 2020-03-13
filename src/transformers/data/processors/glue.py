@@ -180,7 +180,7 @@ class BoolqProcessor(DataProcessor):
         data = []
         with open(os.path.join(data_dir, "train.jsonl")) as file:
             for line in file:
-                data.append(json.load(file))
+                data.append(json.load(line))
         logger.info("LOOKING AT {}".format(os.path.join(data_dir, "train.jsonl")))
         return self._create_examples(data, "train")
 
